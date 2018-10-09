@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>History of Islam: Primary Sources Collection</title>
+    <meta name="description" content="History of Islam: Primary Sources Collection">
+    <script src="https://code.jquery.com/jquery-latest.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script type="application/javascript" src="config.js"></script>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+
+</head>
+<body>
+
+<center>
+    <table class='navtable'>
+        <tr>
+            <td><a id="prevLink" title='Previous page'>
+                <div class='button'>&larr; [z] &larr;</div>
+            </a></td>
+            <td align="center">
+                <input type="text" value="CURPAGEVALUE" id="input" class="button2">
+                <button type="button" id="button" class="button1">Go!</button>
+            </td>
+            <td><a id="nextLink" title='Next page'>
+                <div class='button'>&rarr; [x] &rarr;</div>
+            </a></td>
+        </tr>
+    </table>
+</center>
+
+
+<center>
+    <table class='navtable'>
+        <tr>
+            <td id="curr_title" align="center">
+                FULLREFERENCE, CURRPAGEREF
+            <td>
+        </tr>
+    </table>
+</center>
+
+
+<img id="img" class="center fit" src="CURPAGEPATH">
+<script src="js-yaml.min.js"></script>
+<script type="text/javascript" language="JavaScript">
+
+    String.prototype.rsplit = function(sep, maxsplit) {
+        var split = this.split(sep);
+        return maxsplit ? [ split.slice(0, -maxsplit).join(sep) ].concat(split.slice(-maxsplit)) : split;
+    };
+
+    function pad(n, width, z) {
+        z = z || '0';
+        n = n + '';
+        return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
+    }
+
+    function set_body_height() { // set body height = window height
+        $('body').height($(window).height());
+    }
+
+    // $(document).ready(function () {
+        // $(window).bind('resize', set_body_height);
+        // set_body_height();
+    // });
+
+
+    // document.addEventListener("keyup", function (e) {
+    //     var key = e.which || e.keyCode;
+    //     switch (key) {
+    //         //left arrow 37
+    //         case 90:
+    //             document.getElementById("prevLink").click();
+    //             break;
+    //         //right arrow 39
+    //         case 88:
+    //             document.getElementById("nextLink").click();
+    //             break;
+    //     }
+    // });
+
+    var img_base_url = "https://raw.githubusercontent.com/OpenITI/musawwarat/master/data/";
+    var book_base_url = "https://historyofislam.github.io/data/";
+    var input = $("#input");
+
+    // parse URL to get the book info
+    var loc_href = location.href;
+    var book_info = loc_href.rsplit("/", 4);
+    var yede_author = book_info[1];
+    var book_title = book_info[2];
+    var book_pub = book_info[3];
+    var ver_page = book_info[4];
+    var book_uri = [yede_author, book_title, book_pub].join("/");
+    var pages_index = [yede_author, book_title, book_pub, "pages.index"].join("/");
+    var pages = [];
+    var title_elem = $("#curr_title");
+    var img_elem = $("#img");
+
+    function extract_title(val) {
+        var curr_page = val.split("P");
+        var vol = parseInt(curr_page[0].replace("V", ""));
+        var p = parseInt(curr_page[1]);
+        var vol_p = "Vol." + vol.toString() + " p. " + p.toString();
+        return config[book_uri]["fullreference"] + ", " + vol_p;
+    }
+
+    function update_title(input_vp) {
+        var new_title = extract_title(input_vp);
+        title_elem.html(new_title);
+    }
+
+    $(document).ready(function () {
+        d3.text(["./data", book_uri, "pages.index"].join("/")).then(function(data) {
+            pages = data.split("\n");
+            $(window).bind('resize', set_body_height);
+            set_body_height();
+            input.val(ver_page);
+            var page_uri = [book_uri, ver_page].join("/");
+            img_elem.attr("src", img_base_url + page_uri + ".png");
+            update_title(input.val());
+        });
+    });
+    // var curr_page = curr_hash.rsplit(",", 1)[-1].replace(".png", "")
+    // input.val(curr_page);
+    // $(window).on("hashchange", function () {
+    //     console.log("change: ", location.hash)
+    //     var entered_hash = location.hash;
+    //     var corr_hash = entered_hash.replace(/./g, "/");
+    //     corr_hash = corr_hash.replace(/#/g, "");
+    //     $("#img").attr("src", img_base_url + corr_hash);
+    //     input.val(entered_hash.rsplit(".", 1))
+    // });
+
+    function update_page(input_vp, href) {
+        var loc_parts = href.rsplit("/", 1);
+        var new_url = loc_parts[0] + "/" + input_vp;
+        history.pushState(null, "new page", new_url);
+        update_title(input_vp);
+    }
+
+    $('#button').click(function (e) {
+        var input_vp = input.val();
+        update_page(input_vp, location.href);
+        img_elem.attr("src", img_base_url + [book_uri, input_vp].join("/") + ".png");
+    });
+
+    $('#prevLink').on("click",function() {
+        var curr_page = input.val();
+        var curr_page_idx = pages.indexOf(curr_page + '.png');
+        if (curr_page_idx > 0) {
+            input.val(pages[curr_page_idx - 1].replace(".png", ""));
+            img_elem.attr("src", img_base_url + [book_uri, pages[curr_page_idx - 1]].join("/"));
+
+            var input_val = input.val();
+            update_page(input_val, location.href)
+        }
+        else {
+            alert("Sorry, there is no previous page for this book!")
+        }
+    });
+
+    $('#nextLink').on("click",function(){
+        var curr_page = input.val();
+        var curr_page_idx = pages.indexOf(curr_page + '.png');
+        if (curr_page_idx < pages.length - 1) {
+            input.val(pages[curr_page_idx + 1].replace(".png", ""));
+            img_elem.attr("src", img_base_url + [book_uri, pages[curr_page_idx + 1]].join("/"));
+
+            update_page(input.val(), location.href);
+        }
+        else {
+            alert("Sorry, there is no next page for this book!")
+        }
+    });
+</script>
+
+</body>
+</html>
