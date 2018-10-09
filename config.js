@@ -15,7 +15,7 @@ var config = {
         "bookURI": "/0748Dhahabi/TarikhIslam/BY2003BCM01-ara1/"
     },
     "0748Dhahabi/CibarFiKhabar/KW1960SDM02-ara1": {
-        "fullreference": "al-Ḏahabī. <i>al-ʿIbar fī ḫabar man ġabara/i>. Ed. Ṣalāḥ al-dīn al-Munajjid. 2nd Ed. al-Kuwayt: al-Turāṯ al-ʿarabī, 1984",
+        "fullreference": "al-Ḏahabī. <i>al-ʿIbar fī ḫabar man ġabara</i>. Ed. Ṣalāḥ al-dīn al-Munajjid. 2nd Ed. al-Kuwayt: al-Turāṯ al-ʿarabī, 1984",
         "fullrefSearch": "dhahabi ibar fi khabar man ghabara",
         "bookURI": "/0748Dhahabi/CibarFiKhabar/KW1960SDM02-ara1/"
     }
