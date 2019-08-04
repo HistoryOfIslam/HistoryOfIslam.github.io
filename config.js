@@ -1,8 +1,8 @@
 var config = {
-    "0230IbnSacd/TabaqatKubra/BY1990MQC01-ara1/": {
+    "0230IbnSacd/TabaqatKubra/BY1990MQC01-ara1": {
         "fullreference": "Ibn Saʿd. <i>al-Ṭabaqāt al-kubrá</i>. Ed. Muḥammad ʿAbd al-Qādir ʿAṭā. 1st ed. Bayrūt: Dār al-kutub al-ʿilmīyaŧ, 1410/1990",
         "fullrefSearch": "ibn sad tabaqat kubra tabaqat kabir",
-        "bookURI": "0230IbnSacd/TabaqatKubra/BY1990MQC01-ara1/"
+        "bookURI": "/0230IbnSacd/TabaqatKubra/BY1990MQC01-ara1/"
     },
     "0748Dhahabi/TarikhIslam/BY1990TAD01-ara1": {
         "fullreference": "al-Ḏahabī. <i>Taʾrīḫ al-islām</i>. Ed. ʿUmar ʿAbd al-Salām Tadmuri. 1st Ed. Bayrūt: Dār al-Kitāb al-ʿarabī, 1410/1990",
